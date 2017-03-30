@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from random import randint
 
 class Grid():
@@ -17,13 +18,20 @@ class Grid():
 
     def fillGrid(self, x, y):
         if (self.isValid(int(x),int(y))):
-            self.Matrix[int(y)][int(x)] = 4
+            self.Matrix[int(y)][int(x)] = "█"
 
     def isValid(self, x, y):
         if (x >= 0 and x < self.width and y >= 0 and y < self.width and self.Matrix[x][y] == " "):
             return True
 
         return False
+
+    def notElementOf(self, valid, x, y):
+        for i in range(len(valid)):
+            if (x in valid[i] or y in valid[i]):
+                return False
+
+        return True
 
     def randomFill(self, length):
         x = randint(0,9)
@@ -44,7 +52,7 @@ class Grid():
                     break
 
             for i in range(length):
-                if (self.isValid(x+i,y)):
+                if (self.isValid(x+i,y) and self.notElementOf([validN], x+1, y)):
                     validS.extend(str(x+i))
                     validS.extend(str(y))
                 else:
@@ -52,7 +60,7 @@ class Grid():
                     break
 
             for i in range(length):
-                if (self.isValid(x,y-i)):
+                if (self.isValid(x,y-i) and self.notElementOf([validN, validS], x, y-1)):
                     validW.extend(str(x))
                     validW.extend(str(y-i))
                 else:
@@ -60,7 +68,7 @@ class Grid():
                     break
 
             for i in range(length):
-                if (self.isValid(x,y+i)):
+                if (self.isValid(x,y+i) and self.notElementOf([validN, validS, validW], x, y+1)):
                     validE.extend(str(x))
                     validE.extend(str(y+i))
                 else:
@@ -74,11 +82,11 @@ class Grid():
 
         r = randint(0,len(valid)-1)
 
-        if (valid[r]):
+        if not valid[r]:
+            self.randomFill(length)
+        else:
             for i in range(0,len(valid[r])-1,2):
                 self.fillGrid(valid[r][i], valid[r][i+1])
-        else:
-            self.randomFill(length)
 
     def choseRandom(self):
         self.randomFill(5)
@@ -87,11 +95,6 @@ class Grid():
         self.randomFill(3)
         self.randomFill(2)
 
-
-
-
-
-
-m = Grid()
-m.choseRandom()
-m.printGrid()
+g = Grid()
+g.choseRandom()
+g.printGrid()
