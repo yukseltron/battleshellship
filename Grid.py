@@ -21,3 +21,6 @@ class Grid():
     def setGrid(self, values):
         for i in values:
             self.matrix[i.getX()][i.getY()] = i.getS()
+
+    def setPoint(self, x, y, s):
+        self.matrix[x][y] = s

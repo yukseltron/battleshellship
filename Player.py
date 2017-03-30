@@ -10,7 +10,7 @@ class Player():
         self.ships = []
         self.hits = []
         self.misses = []
-        self.damage = []
+        self.damage = 0
 
     def randomFill(self):
         self.ships.append(self.possibleShips(5))
@@ -18,10 +18,9 @@ class Player():
         self.ships.append(self.possibleShips(3))
         self.ships.append(self.possibleShips(3))
         self.ships.append(self.possibleShips(2))
+        self.updateGrid1(self.ships)
 
-        for i in range(len(self.ships)):
-            self.g1.setGrid(self.ships[i])
-
+    #Finds all possibilites for ship placement based on length, then randomly chooses the best one.
     def possibleShips(self, length):
         x = randint(0,9)
         y = randint(0,9)
@@ -82,6 +81,7 @@ class Player():
 
         return a[r]
 
+    #Checks if it is a valid point on ship graph
     def isValidG1(self, p, a):
         if (p.getX() < 0 or p.getX() > 9 or p.getY() < 0 or p.getY() > 9):
             return False
@@ -91,16 +91,47 @@ class Player():
                     return False
         return True
 
-    def isValidG2(self, p):
+    #Checks if it is a valid point on attack graph
+    def isValidG2(self, p, a):
         if (p.getX() < 0 or p.getX() > 9 or p.getY() < 0 or p.getY() > 9):
             return False
-        if (self.g2.matrix[p.getX()][p.getY()] != " "):
-            return False
+        for i in range(len(a)):
+            for j in range(len(a[i])):
+                if (p.getX() == a[i][j].getX() and p.getY() == a[i][j].getY()):
+                    return False
         return True
+
+    #Success of a player attack
+    def attack(self,enemy,x,y):
+        p = point.Point(x, y, "X")
+        for i in enemy:
+            for j in i:
+                if (x == j.getX() and y == j.getY()):
+                    self.hits.append(p)
+                    self.updateGrid2(self.hits)
+                    return True
+        p.setS("O")
+        self.misses.append(p)
+        self.updateGrid2(self.misses)
+        return False
+
+    #For when player gets hit
+    def getHit(self,x,y):
+        self.damage += 1
+        self.g1.setPoint(x,y,"X")
+
+    #To update ship grid
+    def updateGrid1(self, values):
+        for i in range(len(values)):
+            self.g1.setGrid(values[i])
+
+
+    #To update attack grid
+    def updateGrid2(self, values):
+        self.g2.setGrid(values)
 
     def printGrid1(self):
         self.g1.printGrid()
 
-p = Player()
-p.randomFill()
-p.printGrid1()
+    def printGrid2(self):
+        self.g2.printGrid()

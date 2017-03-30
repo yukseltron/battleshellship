@@ -13,3 +13,6 @@ class Point():
 
     def getS(self):
         return self.s
+
+    def setS(self, s):
+        self.s = s
