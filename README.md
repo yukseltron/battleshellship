@@ -1,2 +1,2 @@
-# battleshellship
+# BattleShellShip
 A python shell battleship game.
