@@ -81,6 +81,25 @@ class Player():
 
         return a[r]
 
+    #Success of a player attack
+    def attack(self,enemy,x,y):
+        p = point.Point(x, y, "X")
+        for i in enemy:
+            for j in i:
+                if (x == j.getX() and y == j.getY()):
+                    self.hits.append(p)
+                    self.updateGrid2(self.hits)
+                    return True
+        p.setS("O")
+        self.misses.append(p)
+        self.updateGrid2(self.misses)
+        return False
+
+    #For when player gets hit
+    def getHit(self,x,y):
+        self.damage += 1
+        self.g1.setPoint(x,y,"X")
+        
     #Checks if it is a valid point on ship graph
     def isValidG1(self, p, a):
         if (p.getX() < 0 or p.getX() > 9 or p.getY() < 0 or p.getY() > 9):
@@ -101,30 +120,10 @@ class Player():
                     return False
         return True
 
-    #Success of a player attack
-    def attack(self,enemy,x,y):
-        p = point.Point(x, y, "X")
-        for i in enemy:
-            for j in i:
-                if (x == j.getX() and y == j.getY()):
-                    self.hits.append(p)
-                    self.updateGrid2(self.hits)
-                    return True
-        p.setS("O")
-        self.misses.append(p)
-        self.updateGrid2(self.misses)
-        return False
-
-    #For when player gets hit
-    def getHit(self,x,y):
-        self.damage += 1
-        self.g1.setPoint(x,y,"X")
-
     #To update ship grid
     def updateGrid1(self, values):
         for i in range(len(values)):
             self.g1.setGrid(values[i])
-
 
     #To update attack grid
     def updateGrid2(self, values):
