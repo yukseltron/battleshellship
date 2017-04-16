@@ -5,3 +5,5 @@ To start, in python shell do:
 ```python
 python Main.py
 ```
+
+Currently only for 2 players.
