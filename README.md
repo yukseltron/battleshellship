@@ -7,4 +7,3 @@ python Main.py
 ```
 
 Currently only for 2 players.
-Single-player mode coming soon!
